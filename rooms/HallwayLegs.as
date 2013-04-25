@@ -11,7 +11,7 @@ package environment.rooms {
             };
 
             this.navigation = {
-                navHall: 'Basement'
+                navHall: 'LongHallway'
             };
 
             this.objects = {
