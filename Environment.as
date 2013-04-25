@@ -1,26 +1,1 @@
-package  {
-    import RoomsController;
-    public class Environment {
-        private stage;
-        public RoomsController;
-        
-        public function Environment(stage) {
-            var mLoader:Loader = new Loader(),
-                mRequest = new URLRequest("as3_elsewhere.swf");
-            this.stage = stage;
-            
-            mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
-                this.stage.addChild(loadEvent.currentTarget.content);
-            });
-            
-            mLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgressHandler);
-            
-            mLoader.load(mRequest);
-        }
-        
-        function onProgressHandler(mProgress:ProgressEvent) {
-            var percent:Number = mProgress.bytesLoaded/mProgress.bytesTotal;
-            trace(percent);
-        }
-    }
-}
+﻿package environment {    import flash.display.MovieClip;    import flash.display.DisplayObject;    import flash.display.Stage;    import environment.*;     import environment.ui.*;    import environment.rooms.*;    import flash.utils.getQualifiedClassName;    public class Environment extends MovieClip {        public static var rooms:Object;        public static var ui:Object = {};        public static var root:MovieClip;        public static var stage:Stage;        public static var view:DisplayObject;                public function Environment() {            //var url:String = this.loaderInfo.loaderURL;            //trace(url);            Environment.stage = this.stage;            Environment.view = this.root;            Environment.rooms = new RoomsController();            Environment.ui.inventory = new Inventory();            /**             * Instantiate these rooms.             */            this.setRooms([                 new IntroDoor(),                new HallwayLegs(),            ]);        }        public function setRooms(rooms:Array) {            Environment.rooms.setupRooms(rooms);        }        public static function getClassName(obj:Object) {            var objName:String = getQualifiedClassName(obj);            objName = objName.replace(/.*::/, '');            return objName;        }    }}
