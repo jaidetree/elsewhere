@@ -1,0 +1,71 @@
+package environment {
+    import flash.net.URLRequest;
+    import flash.display.Loader;
+    import flash.events.Event;
+    import flash.events.ProgressEvent;
+    import flash.display.MovieClip;
+
+    public class SwfLoader {
+        private var mLoader:Loader = new Loader();
+        private var mRequest:URLRequest;
+        private var fileQ:Array = [];
+        private var swfs:Array = [];
+        private var swfsIndex:Array = [];
+        private var totalFiles:int = 0;
+        private var loadedFiles:int = 0;
+
+        public function SwfLoader() {
+        }
+
+        public function addFile(filename:String):void {
+            this.fileQ.push(filename);
+            this.totalFiles++;
+        }
+
+        public function loadFile(filename:String):void {
+            this.addFile(filename);
+            this.load();
+        }
+
+        public function load():void {
+            var self = this,
+                url = fileQ[0];
+
+            if ( fileQ.length === 0 ) {
+                return;
+            }
+
+            this.mRequest = new URLRequest();
+            
+            this.mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
+                self.addSwf(url, MovieClip(loadEvent.currentTarget.content));
+            });
+            
+            this.mLoader.load(mRequest);
+        }
+
+        public function getClip(index:*):void {
+        }
+
+        public function getIndex(index:*):void {
+            if ( typeof(index) === "number" ) {
+                return index;
+            }
+            else if ( typeof(index) ) {
+                return
+        }
+
+        private function onProgressHandler(mProgress:ProgressEvent) {
+            var percent:Number = mProgress.bytesLoaded/mProgress.bytesTotal;
+        }
+
+        private function addSwf(url:String, swf:MovieClip):void {
+            var urls:Array = url.split('/');
+            this.fileQ.shift();
+            this.swfs.push(swf);
+            this.swfsIndex.push(urls[urls.length - 1].replace(/\..*$/, ''));
+            this.loadedFiles++;
+            this.load();
+        }
+    }
+}
