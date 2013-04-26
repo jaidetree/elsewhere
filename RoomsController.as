@@ -4,51 +4,40 @@ package environment {
     import flash.events.Event;
     import flash.events.ProgressEvent;
     import flash.display.MovieClip;
+    import environment.SwfLoader;
 
     public class RoomsController extends MovieClip {
         private var rooms:Array = [];
+        private var swfLoader;
 
         public function RoomsController() {
+            this.swfLoader = new SwfLoader();
         }
 
         public function setupRooms(roomList:Array) {
+            var self = this;
             for( var i in roomList ) {
                 var roomName:String = "";
                 var room = roomList[i];
                 var roomRef:Object;
 
                 roomName = Environment.getClassName(room);
-                roomRef = { roomName: roomName.toLowerCase(), controller: room, mc: {} };
+                roomRef = { roomName: roomName.toLowerCase(), controller: room };
                 this.rooms.push(roomRef);
-                this.loadRoom(room.get('swf'), i);
+                this.swfLoader.addFile(room.get('swf'));
             }
 
-        }
+            this.swfLoader.setCallback(function(mc:MovieClip) {
+                var url = self.swfLoader.url();
+                var roomIndex = self.swfLoader.getFileCount() - 1;
+                self.rooms[roomIndex].controller.setMovie(mc);
 
-        public function loadRoom(filename:String, roomIndex:Number) {
-            var mLoader:Loader = new Loader(),
-                mRequest = new URLRequest(filename),
-                self = this;
-            
-            mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
-                self.rooms[roomIndex].mc = MovieClip(loadEvent.currentTarget.content);
-                self.rooms[roomIndex].controller.setMovie(self.rooms[roomIndex].mc);
-                if( roomIndex == 0) {
-                    self.onRoomsLoaded();
+                if( roomIndex == 0 ) {
+                    self.render(0);
                 }
             });
-            
-            //mLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgressHandler);
-            
-            mLoader.load(mRequest);
-        }
-        
-        private function onProgressHandler(mProgress:ProgressEvent) {
-            var percent:Number = mProgress.bytesLoaded/mProgress.bytesTotal;
-        }
 
-        private function onRoomsLoaded() {
-            this.render(0);
+            this.swfLoader.load();
         }
 
         protected function getRoom(roomIndex) {
@@ -75,7 +64,7 @@ package environment {
         public function render(roomIndex) {
             var room = this.getRoom(roomIndex);
             Environment.view['roomContainer'].removeChildAt(0);
-            Environment.view['roomContainer'].addChild(room.mc);
+            Environment.view['roomContainer'].addChild(room.controller.getMovie());
             room.controller.init();
         }
     }

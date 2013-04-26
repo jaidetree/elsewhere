@@ -51,6 +51,10 @@ package environment {
             this.mc = mc;
         }
 
+        public function getMovie():MovieClip {
+            return this.mc;
+        }
+
 
         protected function setupNav():void {
             var navigations = this.navigation, 

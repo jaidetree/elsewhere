@@ -16,6 +16,11 @@ package environment {
         private var callback:Function;
 
         public function SwfLoader() {
+            var self = this;
+            this.mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
+                self.addSwf(self.url(), MovieClip(loadEvent.currentTarget.content));
+            });
+            
         }
 
         public function setCallback(callback:Function):void {
@@ -27,37 +32,49 @@ package environment {
             this.totalFiles++;
         }
 
-        public function loadFile(filename:String):void {
+        public function loadFile(filename:String, callback:*=null):void {
+            if ( callback !== null ) {
+                this.setCallback(callback);
+            }
+
             this.addFile(filename);
             this.load();
         }
 
-        public function load():void {
-            var self = this,
-                url = fileQ[0];
+        public function getFileCount():int {
+            return this.loadedFiles;
+        }
 
-            if ( fileQ.length === 0 ) {
+        public function url():String {
+            return this.mRequest.url;
+        }
+
+        public function load():void {
+            if ( this.fileQ.length < 1 ) {
                 return;
             }
 
-            this.mRequest = new URLRequest();
-            
-            this.mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
-                self.addSwf(url, MovieClip(loadEvent.currentTarget.content));
-            });
-            
+            var self = this,
+                url = fileQ[0];
+
+            trace("<<Loading: " + url);
+            this.mRequest = new URLRequest(url);
             this.mLoader.load(mRequest);
+
         }
 
-        public function getClip(index:*):void {
+        public function getClip(index:*):MovieClip {
+            var index = this.getIndex(index);
+
+            return this.swfs[index];
         }
 
-        public function getIndex(index:*):void {
+        public function getIndex(index:*):* {
             if ( typeof(index) === "number" ) {
                 return index;
             }
             else if ( typeof(index) ) {
-                return returnthis.swfsIndex.indexOf(index);
+                return this.swfsIndex.indexOf(index);
             }
         }
 
@@ -65,19 +82,22 @@ package environment {
             var percent:Number = mProgress.bytesLoaded/mProgress.bytesTotal;
         }
 
-        private function addSwf(url:String, swf:MovieClip):MovieClip {
+        private function addSwf(url:String, swf:MovieClip) {
             var urls:Array = url.split('/');
-            var file:String = urls[urls.length - 1].replace(/\..*$/, '');
+            var filename:String = urls[urls.length - 1].replace(/\..*$/, '');
+
+            trace('>>Loaded: ' + url);
 
             this.fileQ.shift();
             this.swfs.push(swf);
-            this.swfsIndex.push(file);
+            this.swfsIndex.push(filename);
             this.loadedFiles++;
-            this.load();
 
             if( this.callback['call'] ) {
-                this.callback.call(this, file);
+                this.callback.call(this, swf);
             }
+
+            this.load();
         }
     }
 }

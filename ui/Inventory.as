@@ -1,16 +1,48 @@
 package environment.ui {
+    import flash.display.MovieClip;
     public class Inventory {
         private var itemList:Array = [];
+        private var obtainedItems:Array = [];
+        private var _mc:MovieClip;
 
-        public function Inventory() {
+        public function Inventory(mc:MovieClip) {
+            this.mc(mc);
+
+            for (var item in this._mc) {
+                this._mc[item].visible = false;
+                this.itemList.push(item);
+            }
+        }
+
+        public function mc(mc=null) {
+            if ( mc !== null ) {
+                this._mc = mc;
+            }
+
+            return this._mc;
         }
 
         public function addItem(item) {
-            this.itemList.push(item);
+            if ( ! this.itemExists(item) || this.hasItem(item) ) {
+                return false;
+            }
+            this.obtainedItems.push(item);
+            this._mc[item].visible = true;
+
         }
 
         public function removeItem(itemIndex) {
-            this.itemList.remove( this.getIndex(itemIndex) );
+            this.obtainedItems.remove( this.getIndex(itemIndex) );
+        }
+
+        public function itemExists(itemName):Boolean {
+            for (var item in this.itemList ) {
+                if( item === itemName ) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -23,7 +55,7 @@ package environment.ui {
         }
 
         public function getItem(itemIndex) {
-            return this.itemList[ this.getIndex(itemIndex) ];
+            return this.obtainedItems[ this.getIndex(itemIndex) ];
         }
 
 
@@ -41,13 +73,13 @@ package environment.ui {
             }
 
             else if ( typeof ( itemIndex ) == "object" ) {
-                return this.itemList.indexOf(itemIndex);
+                return this.obtainedItems.indexOf(itemIndex);
             }
         }
 
         private function findByName(itemName:String) {
-            for ( var index in this.itemList ) {
-                if ( this.itemList[index].title.toLowerCase() === itemName.toLowerCase() ) {
+            for ( var index in this.obtainedItems ) {
+                if ( this.obtainedItems[index].title.toLowerCase() === itemName.toLowerCase() ) {
                     return index;
                 }
             }
