@@ -13,8 +13,13 @@ package environment {
         private var swfsIndex:Array = [];
         private var totalFiles:int = 0;
         private var loadedFiles:int = 0;
+        private var callback:Function;
 
         public function SwfLoader() {
+        }
+
+        public function setCallback(callback:Function):void {
+            this.callback = callback;
         }
 
         public function addFile(filename:String):void {
@@ -52,20 +57,27 @@ package environment {
                 return index;
             }
             else if ( typeof(index) ) {
-                return
+                return returnthis.swfsIndex.indexOf(index);
+            }
         }
 
         private function onProgressHandler(mProgress:ProgressEvent) {
             var percent:Number = mProgress.bytesLoaded/mProgress.bytesTotal;
         }
 
-        private function addSwf(url:String, swf:MovieClip):void {
+        private function addSwf(url:String, swf:MovieClip):MovieClip {
             var urls:Array = url.split('/');
+            var file:String = urls[urls.length - 1].replace(/\..*$/, '');
+
             this.fileQ.shift();
             this.swfs.push(swf);
-            this.swfsIndex.push(urls[urls.length - 1].replace(/\..*$/, ''));
+            this.swfsIndex.push(file);
             this.loadedFiles++;
             this.load();
+
+            if( this.callback['call'] ) {
+                this.callback.call(this, file);
+            }
         }
     }
 }
