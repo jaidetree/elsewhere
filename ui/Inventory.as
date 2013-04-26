@@ -32,7 +32,9 @@ package environment.ui {
         }
 
         public function removeItem(itemIndex) {
-            this.obtainedItems.remove( this.getIndex(itemIndex) );
+            var index = this.getIndex(itemIndex);
+            this._mc[index].visible = false;
+            this.obtainedItems.remove( index );
         }
 
         public function itemExists(itemName):Boolean {
