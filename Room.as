@@ -15,7 +15,7 @@ package environment {
         protected var events:Array;
         protected var dialogs:Object;
         protected var mc:MovieClip;
-        protected var currentFrame:Number = 1;
+        protected var currentFrame:Number = 0;
         protected var isSetup:Boolean = false;
 
         /* 'intro': [0, 'endFrame'] */
@@ -92,10 +92,14 @@ package environment {
             var frame;
 
             this.mc.addEventListener( Event.ENTER_FRAME, function(e:Event) { 
+                if ( self.mc.currentFrame === self.currentFrame ) {
+                    return false;
+                }
                 for ( var frameIndex in frames ) {
                     if ( self.mc.currentLabel == frameIndex || self.mc.currentFrame == frameIndex ) {
                         frames[frameIndex].call(self);
-                        self.mc.removeEventListener( Event.ENTER_FRAME, arguments.callee );
+                        self.currentFrame = self.mc.currentFrame;
+                        //self.mc.removeEventListener( Event.ENTER_FRAME, arguments.callee );
                     }
                 }
             });
