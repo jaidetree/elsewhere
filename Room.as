@@ -10,8 +10,11 @@ package environment {
         protected var animations:Object;
         protected var navigation:Object;
         protected var objects:Object;
+        protected var frames:Object;
         protected var events:Array;
         protected var mc:MovieClip;
+        protected var currentFrame:Number = 0;
+        protected var isSetup:Boolean = false;
 
         /* 'intro': [0, 'endFrame'] */
         
@@ -38,11 +41,14 @@ package environment {
         }
 
         public function init():void {
-            this.setupNav();
-            this.setupObjects();
-            this.setupAnimations();
-            this.setupEvents();
-            this.mc.gotoAndStop(0);
+            if ( ! this.isSetup ) {
+                this.setupNav();
+                this.setupObjects();
+                this.setupFrames();
+                this.setupEvents();
+                this.isSetup = true;
+            }
+            this.mc.gotoAndStop(this.currentFrame);
         }
 
         public function get(property:String) {
@@ -57,6 +63,27 @@ package environment {
             return this.mc;
         }
 
+        protected function show(mcName):void {
+            this.mc[mcName].visible = true;
+        }
+
+        protected function hide(mcName):void {
+            this.mc[mcName].visible = false;
+        }
+
+        protected function setupFrames():void {
+            var self = this;
+            var frames = this.frames;
+            var frame;
+
+            this.mc.addEventListener( Event.ENTER_FRAME, function(e:Event) { 
+                for ( var frameIndex in frames ) {
+                    if ( self.mc.currentLabel == frameIndex || self.mc.currentFrame == frameIndex ) {
+                        frames[frameIndex].call(self);
+                    }
+                }
+            });
+        }
 
         protected function setupNav():void {
             var navigations = this.navigation, 
@@ -87,9 +114,6 @@ package environment {
             }
         }
 
-        protected function setupAnimations():void {
-        }
-
         protected function animate(animationName):void {
             var self = this,
                 animation = this.animations[animationName];
@@ -98,6 +122,7 @@ package environment {
                 if ( self.mc.currentLabel === animation[1] || self.mc.currentFrame === animation[1] )  {
                     self.mc.stop();
                     self.mc.removeEventListener(Event.ENTER_FRAME, arguments.callee);
+                    self.currentFrame = self.mc.currentFrame;
                 }
             });
 
