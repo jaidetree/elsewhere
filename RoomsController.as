@@ -21,6 +21,8 @@ package environment {
                 var room = roomList[i];
                 var roomRef:Object;
 
+                room.setup();
+
                 roomName = Environment.getClassName(room);
                 roomRef = { roomName: roomName.toLowerCase(), controller: room };
                 this.rooms.push(roomRef);
@@ -32,9 +34,10 @@ package environment {
                 var roomIndex = self.swfLoader.getFileCount() - 1;
                 self.rooms[roomIndex].controller.setMovie(mc);
 
-                if( roomIndex == 0 ) {
-                    self.render(0);
-                }
+            });
+
+            this.swfLoader.onComplete(function() { 
+                self.render(0);
             });
 
             this.swfLoader.load();

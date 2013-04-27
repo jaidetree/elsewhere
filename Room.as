@@ -3,6 +3,7 @@ package environment {
     import flash.events.MouseEvent;
     import flash.events.Event;
 
+    import environment.Environment;
     import environment.utils.TxtLoader;
 
     public class Room {
@@ -12,8 +13,9 @@ package environment {
         protected var objects:Object;
         protected var frames:Object;
         protected var events:Array;
+        protected var dialogs:Object;
         protected var mc:MovieClip;
-        protected var currentFrame:Number = 0;
+        protected var currentFrame:Number = 1;
         protected var isSetup:Boolean = false;
 
         /* 'intro': [0, 'endFrame'] */
@@ -40,15 +42,20 @@ package environment {
         public function Room():void {
         }
 
+        public function setup():void {
+            this.setupDialogs();
+        }
+
         public function init():void {
             if ( ! this.isSetup ) {
                 this.setupNav();
                 this.setupObjects();
-                this.setupFrames();
                 this.setupEvents();
                 this.isSetup = true;
             }
+            this.setupFrames();
             this.mc.gotoAndStop(this.currentFrame);
+            Environment.clearDialog();
         }
 
         public function get(property:String) {
@@ -71,6 +78,14 @@ package environment {
             this.mc[mcName].visible = false;
         }
 
+        protected function setupDialogs():void {
+            var self = this;
+            var dialogs = this.dialogs;
+            for ( var dialog in dialogs ) {
+                TxtLoader.loadFile( dialogs[dialog] );
+            }
+        }
+
         protected function setupFrames():void {
             var self = this;
             var frames = this.frames;
@@ -80,6 +95,7 @@ package environment {
                 for ( var frameIndex in frames ) {
                     if ( self.mc.currentLabel == frameIndex || self.mc.currentFrame == frameIndex ) {
                         frames[frameIndex].call(self);
+                        self.mc.removeEventListener( Event.ENTER_FRAME, arguments.callee );
                     }
                 }
             });
@@ -87,31 +103,39 @@ package environment {
 
         protected function setupNav():void {
             var navigations = this.navigation, 
-                navMovieClip,
-                includes,
                 self = this;
 
 
             for ( var uiName in navigations ) {
-                navMovieClip = this.mc[uiName];
-                navMovieClip.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){ 
-                    Environment.rooms.render(navigations[uiName]);
-                });
+                var navMovieClip = this.mc[uiName];
+                this.setupNavEvent(navMovieClip, navigations[uiName]);
             }
+        }
+
+        protected function setupNavEvent(navMovieClip, clipName):void {
+            navMovieClip.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){ 
+                Environment.rooms.render(clipName);
+            });
         }
 
         protected function setupObjects():void {
             var self = this;
-            var object;
             for (var i in this.objects) {
-                object = this.objects[i];
+                var object = this.objects[i];
                 if( object['dialog'] ) {
-                    TxtLoader.loadFile( object['dialog'] );
-                    Environment.view[i].addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
-                        Environment.displayDialog( object['dialog'] );
-                    });
+                    this.setupObjectHandler(i, this.dialogs[object['dialog']] );
                 }
             }
+        }
+
+        protected function setupObjectHandler(i, dialog):void {
+            Environment.view[i].addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
+                Environment.displayDialog( dialog );
+            });
+        }
+
+        protected function setDialog(dialogName):void {
+            Environment.displayDialog( this.dialogs[dialogName] );            
         }
 
         protected function animate(animationName):void {

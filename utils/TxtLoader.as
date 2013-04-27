@@ -1,6 +1,7 @@
 package environment.utils {
     import flash.net.URLRequest;
-    import flash.display.Loader;
+    import flash.net.URLLoader;
+    import flash.net.URLLoaderDataFormat;
     import flash.events.Event;
     import flash.events.ProgressEvent;
     import flash.display.MovieClip;
@@ -13,20 +14,21 @@ package environment.utils {
 
         public static function loadFile(url:String, callback=null):void {
             var mRequest:URLRequest;
-            var mLoader:Loader = new Loader();
+            var mLoader:URLLoader = new URLLoader();
             var self = TxtLoader;
 
-            mRequest = new URLRequest(url);
-            mLoader.load(mRequest);
-            mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
-                TxtLoader.txtFiles[url] = String(loadEvent.currentTarget.content);
+            mRequest = new URLRequest("Dialog/" + url);
+            mLoader.dataFormat = URLLoaderDataFormat.TEXT;
+            mLoader.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
+                TxtLoader.txtFiles[url] = String(mLoader.data);
                 if ( typeof( callback ) == "function" ) {
-                    callback(TxtLoader.txtFiles[url]);
+                    //callback(TxtLoader.txtFiles[url]);
                 }
             });
+            mLoader.load(mRequest);
         }
 
-        public static function getTxt(index:*):* {
+        public static function getTxt(index:*):String {
             return TxtLoader.txtFiles[index];
         }
 

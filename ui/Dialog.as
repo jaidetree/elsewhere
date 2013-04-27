@@ -5,7 +5,7 @@ package environment.ui {
     import environment.utils.TxtLoader;
 
     public class Dialog {
-        private var textList:Array = [];
+        protected var textList:Array = [];
         private var index:Number = 0;
         private var _mc:TextField;
 
@@ -15,21 +15,23 @@ package environment.ui {
         }
 
         public function showText(file) {
-            var txt:String = TxtLoader.getTxt(file);
+            var txt = TxtLoader.getTxt(file);
             var mc = this.mc();
-            this.textList = txt.split(String.fromCharCode(13) + String.fromCharCode(13));
+            this.textList = txt.split('\n\n');
             mc.text = this.textList[0];
             this.index = 0;
         }
 
+        public function clear() {
+            this.mc().text = "";
+        }
+
         private function cycleDialog(e:MouseEvent) {
             var mc = this.mc();
-            if ( this.index < this.textList.length ) {
+            if ( this.index < this.textList.length - 1 ) {
                 this.index++;
                 mc.text = this.textList[this.index];
-            } else {
-                mc.text = "";
-            }
+            }        
         }
 
 

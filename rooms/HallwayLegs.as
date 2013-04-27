@@ -14,6 +14,16 @@ package environment.rooms {
                 navHall: 'LongHallway'
             };
 
+            this.dialogs = {
+                'intro': 'hallwaylegs.txt'
+            };
+
+            this.frames = {
+                1: function() {
+                    this.setDialog('intro');
+                }
+            };
+
             this.objects = {
                 key_1: {
                     action: 'environment.addToInventory',

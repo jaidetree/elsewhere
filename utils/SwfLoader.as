@@ -14,6 +14,7 @@ package environment.utils {
         private var totalFiles:int = 0;
         private var loadedFiles:int = 0;
         private var callback:Function;
+        private var onCompleteHandler:Function;
 
         public function SwfLoader() {
             var self = this;
@@ -21,6 +22,10 @@ package environment.utils {
                 self.addSwf(self.url(), MovieClip(loadEvent.currentTarget.content));
             });
             
+        }
+
+        public function onComplete(callback:Function) {
+            this.onCompleteHandler = callback;
         }
 
         public function setCallback(callback:Function):void {
@@ -51,6 +56,9 @@ package environment.utils {
 
         public function load():void {
             if ( this.fileQ.length < 1 ) {
+                if( typeof(this.onCompleteHandler) === "function" ) {
+                    this.onCompleteHandler();
+                }
                 return;
             }
 
