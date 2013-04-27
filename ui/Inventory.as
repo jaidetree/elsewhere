@@ -39,7 +39,7 @@ package environment.ui {
 
         public function itemExists(itemName):Boolean {
             for (var item in this.itemList ) {
-                if( item === itemName ) {
+                if( this.itemList[item] == itemName ) {
                     return true;
                 }
             }
@@ -48,6 +48,9 @@ package environment.ui {
         }
 
         public function hasItem(itemIndex) {
+            if ( "name" in itemIndex ) {
+                itemIndex = itemIndex.name;
+            }
             if ( this.getIndex(itemIndex) > -1 ) {
                 return true;
             } else {
@@ -80,7 +83,7 @@ package environment.ui {
 
         private function findByName(itemName:String) {
             for ( var index in this.obtainedItems ) {
-                if ( this.obtainedItems[index].title.toLowerCase() === itemName.toLowerCase() ) {
+                if ( this.obtainedItems[index].toLowerCase() === itemName.toLowerCase() ) {
                     return index;
                 }
             }

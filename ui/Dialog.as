@@ -14,10 +14,20 @@ package environment.ui {
             mc.addEventListener(MouseEvent.CLICK, this.cycleDialog);
         }
 
-        public function showText(file) {
-            var txt = TxtLoader.getTxt(file);
+        public function setText(txt) {
             var mc = this.mc();
-            this.textList = txt.split('\n\n');
+
+            if ( typeof ( txt ) == "array" ) {
+                this.textList = txt;
+            }
+            else if ( RegExp(/\.txt$/g).test(txt) ) {
+                txt = TxtLoader.getTxt(txt);
+                this.textList = txt.split('\n\n');
+            } 
+            else {
+                this.textList = [ txt ];
+            }
+
             mc.text = this.textList[0];
             this.index = 0;
         }

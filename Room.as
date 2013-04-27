@@ -18,27 +18,6 @@ package environment {
         protected var currentFrame:Number = 0;
         protected var isSetup:Boolean = false;
 
-        /* 'intro': [0, 'endFrame'] */
-        
-        /*
-        private var navigation:Object = {
-
-            door_1: 'Basement', 
-            door_2: 'Cellar',
-            door_3: {
-                className: 'LivingRoom',
-                requires: ['key_1']
-            }
-        };
-
-        private var objects:Object = {
-            key_1: {
-                action: 'environment.addToInventory',
-                dialog: 'Dialog/IntroDoor.txt'
-            }
-        };
-        */
-
         public function Room():void {
         }
 
@@ -55,7 +34,7 @@ package environment {
             }
             this.setupFrames();
             this.mc.gotoAndStop(this.currentFrame);
-            Environment.clearDialog();
+            this.clearDialog();
         }
 
         public function get(property:String) {
@@ -82,6 +61,9 @@ package environment {
             var self = this;
             var dialogs = this.dialogs;
             for ( var dialog in dialogs ) {
+                if ( RegExp(/\.txt$/g).test(dialogs[dialog]) === false ) { 
+                    continue;
+                }
                 TxtLoader.loadFile( dialogs[dialog] );
             }
         }
@@ -124,23 +106,44 @@ package environment {
 
         protected function setupObjects():void {
             var self = this;
+            var mc = this.mc;
             for (var i in this.objects) {
-                var object = this.objects[i];
-                if( object['dialog'] ) {
-                    this.setupObjectHandler(i, this.dialogs[object['dialog']] );
+                var objectData = this.objects[i];
+                if ( ! mc[i] ) {
+                    continue;
                 }
+                this.setObjectCallback(i, objectData);
             }
         }
 
-        protected function setupObjectHandler(i, dialog):void {
-            Environment.view[i].addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
-                Environment.displayDialog( dialog );
+        protected function setObjectCallback(mcName, objectData):void {
+            var callback:Function;
+            var self = this;
+            var mc = this.mc;
+            if ( typeof (objectData) === "function" ) {
+                callback = function() {
+                    objectData.call(mc[mcName]);
+                };
+            } 
+            else if( "dialog" in objectData ) {
+                callback = function() {
+                    self.setDialog( objectData.dialog );
+                };
+            }
+
+            mc[mcName].addEventListener(MouseEvent.CLICK, function(e:MouseEvent){ 
+                callback();
             });
         }
 
         protected function setDialog(dialogName):void {
             Environment.displayDialog( this.dialogs[dialogName] );            
         }
+        
+        protected function clearDialog():void {
+            Environment.clearDialog();
+        }
+
 
         protected function animate(animationName):void {
             var self = this,

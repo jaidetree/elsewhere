@@ -22,7 +22,7 @@ package environment.utils {
             mLoader.addEventListener(Event.COMPLETE, function(loadEvent:Event){ 
                 TxtLoader.txtFiles[url] = String(mLoader.data);
                 if ( typeof( callback ) == "function" ) {
-                    //callback(TxtLoader.txtFiles[url]);
+                    callback(TxtLoader.txtFiles[url]);
                 }
             });
             mLoader.load(mRequest);
