@@ -47,7 +47,6 @@ package environment.ui {
             return false;
         }
 
-
         public function hasItem(itemIndex) {
             if ( this.getIndex(itemIndex) > -1 ) {
                 return true;

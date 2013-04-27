@@ -4,7 +4,7 @@ package environment {
     import flash.events.Event;
     import flash.events.ProgressEvent;
     import flash.display.MovieClip;
-    import environment.SwfLoader;
+    import environment.utils.SwfLoader;
 
     public class RoomsController extends MovieClip {
         private var rooms:Array = [];

@@ -1,4 +1,4 @@
-package environment {
+package environment.utils {
     import flash.net.URLRequest;
     import flash.display.Loader;
     import flash.events.Event;

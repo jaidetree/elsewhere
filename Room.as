@@ -3,6 +3,8 @@ package environment {
     import flash.events.MouseEvent;
     import flash.events.Event;
 
+    import environment.utils.TxtLoader;
+
     public class Room {
         protected var swf;
         protected var animations:Object;
@@ -27,7 +29,7 @@ package environment {
         private var objects:Object = {
             key_1: {
                 action: 'environment.addToInventory',
-                msg: 'You have picked up a key.'
+                dialog: 'Dialog/IntroDoor.txt'
             }
         };
         */
@@ -72,6 +74,17 @@ package environment {
         }
 
         protected function setupObjects():void {
+            var self = this;
+            var object;
+            for (var i in this.objects) {
+                object = this.objects[i];
+                if( object['dialog'] ) {
+                    TxtLoader.loadFile( object['dialog'] );
+                    Environment.view[i].addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
+                        Environment.displayDialog( object['dialog'] );
+                    });
+                }
+            }
         }
 
         protected function setupAnimations():void {
