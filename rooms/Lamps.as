@@ -35,7 +35,6 @@ package environment.rooms {
             this.objects = {
 
                 hole: function() {
-                    self.animate('rescue');
                     if ( self.hasItem('yarn') ) {
                         self.animate('rescue');
                     } else {

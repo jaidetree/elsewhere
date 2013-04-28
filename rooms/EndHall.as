@@ -23,7 +23,7 @@ package environment.rooms {
             this.navigation = {
                 navShoeroom: 'Shoeroom',
                 navTea: 'Tearoom',
-                navExit: 'Stairway',
+                navExit: 'Stairs',
                 navLobby: 'MainLobby'
             };
 
@@ -56,6 +56,7 @@ package environment.rooms {
                     if ( ! self.locked && self.hasItem('blackkey') ) {
                         self.mc.gotoAndStop('ending');
                         self.currentFrame = self.mc.currentFrame;
+                        return;
                     }
                     self.locked = false;
                     self.setDialog('unlocked');

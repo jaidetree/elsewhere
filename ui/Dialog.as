@@ -29,6 +29,9 @@ package environment.ui {
             }
 
             mc.text = this.textList[0];
+            if ( this.textList.length > 1 ) {
+                mc.text = mc.text + ' (click to continue)';
+            }
             this.index = 0;
         }
 
@@ -41,6 +44,9 @@ package environment.ui {
             if ( this.index < this.textList.length - 1 ) {
                 this.index++;
                 mc.text = this.textList[this.index];
+                if ( this.textList.length > 1 && this.index < this.textList.length - 1 ) {
+                    mc.text = mc.text + ' (click to continue)';
+                }
             }        
         }
 

@@ -14,7 +14,7 @@ package environment.rooms {
             this.dialogs = {
                 intro: 'I enter a tight space with tilted walls. Items are lined along the walls to ward off the bad energy with triangles, salt, iron. Despite these precautions the room has an ominous vibe. I have a hard time breathing in here. ',
                 yarn: 'This ball of yarn looks out of place. I’ll hold on to it.',
-                hatch_key: 'he white key opens the latched door. I can hear water down below.',
+                hatch_key: 'The white key opens the latched door. I can hear water down below.',
                 tv: 'The TV is off but I hear a buzzing electrical noise coming from it.',
                 salt: 'There is a large bag of unused salt. It’d be fun to dump it all over the shaggy carpet.',
                 pyramids: 'There are many pyramids in this room. They are made of different light colored stones.',
@@ -25,7 +25,11 @@ package environment.rooms {
 
             this.navigation = {
                navDown: 'Sea',
-                navHall: 'EndHall'
+               navHall: 'EndHall'
+            };
+
+            this.animations = {
+                'flicker': ['flicker', 'signon']
             };
 
             this.objects = {
@@ -39,9 +43,8 @@ package environment.rooms {
 
                 hatch: function() {
                     if( self.hasItem('blackkey') ) {
-                        self.show('signAnimation');
-                        self.mc.signAnimation.play();
-                        self.show('navDown');
+                        self.setDialog('hatch_key');
+                        self.animate('flicker');
                         self.hide('hatch');
                     }
                     else {
@@ -58,10 +61,17 @@ package environment.rooms {
 
             this.frames = {
                 '1': function() {
+                    self.mc.signAnimation.stop();
                     self.setDialog('intro');
                     self.show('yarn');
                     self.hide('signAnimation');
                     self.hide('navDown');
+                },
+                'signon': function() {
+                    self.show('signAnimation');
+                    self.show('navDown');
+                    self.mc.signAnimation.play();
+                    self.currentFrame = self.mc.currentFrame;
                 }
             };
         }

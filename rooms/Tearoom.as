@@ -24,7 +24,7 @@ package environment.rooms {
             this.dialogs = {
                 intro: 'The room is dark, diabolic, and in all corners cacti thrive. A great root looms over a tea party hosted around a well with four ghost girls. Time seems to be at a stand-still.',
                 closet: [
-                    'Prude girl: “So rude. Don’t open that!” (click to continue)',
+                    'Prude girl: “So rude. Don’t open that!”',
                     'I manage a peek before I shut it. Looks like the girls keep their clothes and toys here. Inside the closet also stands a mirror.'
                 ],
                 banners: 'The banners have inverted stars as emblems. The girls seem to be part of a strange sorority.',
@@ -50,8 +50,8 @@ package environment.rooms {
                 sad_3: 'If she really can’t leave she doesn’t need the key. But I can’t talk to her when she’s like this. Maybe if I show her some kindness she won’t be so clenched up.',
                 sad_key: '“...Don’t waste time here. You need to leave this place.”',
                 sad_teacup: [
-                    'Thank you. I’d ask you to join but you probably wouldn’t like this party... You need this key right? (click to continue)',
-                    'The girl drops the key. It’s a black, chalky, and rough to the touch. (click to continue)',
+                    'Thank you. I’d ask you to join but you probably wouldn’t like this party... You need this key right?',
+                    'The girl drops the key. It’s a black, chalky, and rough to the touch.',
                     'The party will be over soon.',
                     'I wonder why the scientist never came while he was still alive to get the key to the underground ocean? Did he really want to stay here after all?'
                 ]
