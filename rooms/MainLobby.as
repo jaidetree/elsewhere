@@ -15,6 +15,11 @@ package environment.rooms {
                 'panUp': ['up', 'top']
             };
 
+            this.dialogs = {
+                'intro': 'Roots sprout out above the closest door. Next to it is a mask that is smiling as though it has secrets to tell. Another door has a large candelabra beside it. The last door visible has the horns of a bull thrusting proudly above it’s mantle.',
+                'floor': 'When I walk this direction, the floorboards quickly melt away to nothing. I feel I have stepped off the map of existence. I better go back. This worlds seems to have different booby traps.'
+            };
+
             this.navigation = {
                 navHall: 'ShortHallway',
                 navLab: 'Lab',
@@ -31,6 +36,7 @@ package environment.rooms {
 
             this.frames = {
                 'hallway2': function() { 
+                    this.setDialog('intro')
                     this.hide('animateUp');
                     this.show('animateDown');
                     this.show('navHall');
@@ -46,15 +52,11 @@ package environment.rooms {
                     this.hide('navExit');
                     this.hide('navLamps');
                     this.show('animateUp');
+                    this.setDialog('floor');
                 },
 
                 'top': function() {
-                    this.hide('animateUp');
-                    this.show('animateDown');
-                    this.show('navHall');
-                    this.show('navLab');
-                    this.show('navExit');
-                    this.show('navLamps');
+                    this.mc.gotoAndStop('hallway2');
                 }
             };
 

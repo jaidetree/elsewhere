@@ -66,7 +66,7 @@ package environment.rooms {
             };
 
             this.frames = {
-                1: function() {
+                '1': function() {
                     this.setDialog('intro');
                     this.hide('screen');
                 },
@@ -79,7 +79,8 @@ package environment.rooms {
                 },
 
                 'hidden': function() {
-                    self.mc.gotoAndStop(1);
+                    this.mc.gotoAndStop(0);
+                    self.currentFrame = 0;
                 }
             };
         }

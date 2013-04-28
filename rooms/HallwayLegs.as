@@ -23,13 +23,6 @@ package environment.rooms {
                     this.setDialog('intro');
                 }
             };
-
-            this.objects = {
-                key_1: {
-                    action: 'environment.addToInventory',
-                    msg: 'You have picked up a key.'
-                }
-            };
         }
     }
 }

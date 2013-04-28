@@ -16,6 +16,7 @@ package environment {
         protected var dialogs:Object;
         protected var mc:MovieClip;
         protected var currentFrame:Number = 0;
+        protected var lastFrame:Number = -1;
         protected var isSetup:Boolean = false;
 
         public function Room():void {
@@ -26,15 +27,17 @@ package environment {
         }
 
         public function init():void {
+            var currentFrame:Number;
             if ( ! this.isSetup ) {
                 this.setupNav();
                 this.setupObjects();
                 this.setupEvents();
+                this.setupFrames();
                 this.isSetup = true;
             }
-            this.setupFrames();
-            this.mc.gotoAndStop(this.currentFrame);
             this.clearDialog();
+            this.mc.gotoAndStop(this.currentFrame);
+
         }
 
         public function get(property:String) {
@@ -47,6 +50,12 @@ package environment {
 
         public function getMovie():MovieClip {
             return this.mc;
+        }
+
+        public function resetFrames():void {
+            this.lastFrame = 0;
+            this.mc.removeEventListener( Event.ENTER_FRAME, this.onEnterFrame );
+            this.mc.addEventListener( Event.ENTER_FRAME, this.onEnterFrame );
         }
 
         protected function show(mcName):void {
@@ -70,21 +79,23 @@ package environment {
 
         protected function setupFrames():void {
             var self = this;
-            var frames = this.frames;
             var frame;
 
-            this.mc.addEventListener( Event.ENTER_FRAME, function(e:Event) { 
-                if ( self.mc.currentFrame === self.currentFrame ) {
-                    return false;
+            this.mc.addEventListener( Event.ENTER_FRAME, this.onEnterFrame );
+        }
+
+        protected function onEnterFrame(e:Event) {
+            var frames = this.frames;
+            if ( this.lastFrame === this.mc.currentFrame ) {
+                return;
+            }
+            for ( var frameIndex in frames ) {
+                if ( this.mc.currentLabel == frameIndex || this.mc.currentFrame == int(frameIndex) ) {
+                    this.lastFrame = this.mc.currentFrame;
+                    frames[frameIndex].call(this);
                 }
-                for ( var frameIndex in frames ) {
-                    if ( self.mc.currentLabel == frameIndex || self.mc.currentFrame == frameIndex ) {
-                        frames[frameIndex].call(self);
-                        self.currentFrame = self.mc.currentFrame;
-                        //self.mc.removeEventListener( Event.ENTER_FRAME, arguments.callee );
-                    }
-                }
-            });
+            }
+            //this.currentFrame = this.mc.currentFrame;
         }
 
         protected function setupNav():void {
@@ -100,6 +111,7 @@ package environment {
 
         protected function setupNavEvent(navMovieClip, clipName):void {
             navMovieClip.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){ 
+                e.target.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
                 Environment.rooms.render(clipName);
             });
         }
@@ -139,13 +151,13 @@ package environment {
         protected function setDialog(dialogName):void {
             Environment.displayDialog( this.dialogs[dialogName] );            
         }
-        
+
         protected function clearDialog():void {
             Environment.clearDialog();
         }
 
 
-        protected function animate(animationName):void {
+        protected function animate(animationName, updateState:Boolean = false):void {
             var self = this,
                 animation = this.animations[animationName];
 

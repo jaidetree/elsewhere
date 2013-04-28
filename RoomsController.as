@@ -9,6 +9,7 @@ package environment {
     public class RoomsController extends MovieClip {
         private var rooms:Array = [];
         private var swfLoader;
+        private var currentRoom;
 
         public function RoomsController() {
             this.swfLoader = new SwfLoader();
@@ -66,9 +67,21 @@ package environment {
 
         public function render(roomIndex) {
             var room = this.getRoom(roomIndex);
-            Environment.view['roomContainer'].removeChildAt(0);
-            Environment.view['roomContainer'].addChild(room.controller.getMovie());
+            var currentRoom;
+            var mc = room.controller.getMovie();
+            if ( mc.visible === false ) {
+                mc.visible = true;
+                room.controller.resetFrames();
+            } else {
+                Environment.view['roomContainer'].addChild(room.controller.getMovie());
+            }
+
+            if ( this.currentRoom ) {
+                currentRoom = this.currentRoom.controller.getMovie();
+                currentRoom.visible = false;
+            }
             room.controller.init();
+            this.currentRoom = room;
         }
     }
 }
