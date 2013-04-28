@@ -59,7 +59,11 @@ package environment {
         }
 
         protected function show(mcName):void {
-            this.mc[mcName].visible = true;
+            if ( mcName in this.mc ) {
+                this.mc[mcName].visible = true;
+            } else {
+                trace(mcName);
+            }
         }
 
         protected function hide(mcName):void {
