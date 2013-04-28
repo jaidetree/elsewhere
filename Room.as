@@ -63,7 +63,11 @@ package environment {
         }
 
         protected function hide(mcName):void {
-            this.mc[mcName].visible = false;
+            if ( mcName in this.mc ) {
+                this.mc[mcName].visible = false;
+            } else {
+                trace( mcName );
+            }
         }
 
         protected function setupDialogs():void {
@@ -110,6 +114,9 @@ package environment {
         }
 
         protected function setupNavEvent(navMovieClip, clipName):void {
+            if ( navMovieClip == undefined ) {
+                trace( navMovieClip );
+            }
             navMovieClip.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){ 
                 e.target.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
                 Environment.rooms.render(clipName);
@@ -206,6 +213,14 @@ package environment {
                     self.animate(event.using);
                 }
             });
+        }
+
+        protected function addItem(item):void {
+            Environment.addToInventory(item);
+        }
+
+        protected function hasItem(item):Boolean {
+            return Environment.ui.inventory.hasItem(item);
         }
 
     }

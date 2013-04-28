@@ -17,6 +17,7 @@ package environment {
 
         public function setupRooms(roomList:Array) {
             var self = this;
+            var dialogCounts:Object = {};
             for( var i in roomList ) {
                 var roomName:String = "";
                 var room = roomList[i];

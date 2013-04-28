@@ -17,7 +17,7 @@ package environment.ui {
         public function setText(txt) {
             var mc = this.mc();
 
-            if ( typeof ( txt ) == "array" ) {
+            if ( typeof ( txt ) == "object" ) {
                 this.textList = txt;
             }
             else if ( RegExp(/\.txt$/g).test(txt) ) {

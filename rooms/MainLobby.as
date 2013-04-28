@@ -23,7 +23,7 @@ package environment.rooms {
             this.navigation = {
                 navHall: 'ShortHallway',
                 navLab: 'Lab',
-                navExit: 'ExitHall',
+                navExit: 'EndHall',
                 navLamps: 'Lamps'
             };
 
