@@ -24,7 +24,7 @@ package environment.rooms {
             };
 
             this.navigation = {
-               navDown: 'Sea',
+               navDown: 'Beach',
                navHall: 'EndHall'
             };
 
@@ -42,7 +42,7 @@ package environment.rooms {
                 },
 
                 hatch: function() {
-                    if( self.hasItem('blackkey') ) {
+                    if( self.hasItem('whitekey') ) {
                         self.setDialog('hatch_key');
                         self.animate('flicker');
                         self.hide('hatch');
@@ -66,12 +66,19 @@ package environment.rooms {
                     self.show('yarn');
                     self.hide('signAnimation');
                     self.hide('navDown');
+                    self.hide('ghosts');
+                    self.mc.ghosts.gotoAndStop(1);
                 },
                 'signon': function() {
                     self.show('signAnimation');
                     self.show('navDown');
                     self.mc.signAnimation.play();
                     self.currentFrame = self.mc.currentFrame;
+
+                    if ( self.hasItem('roperock') && self.mc.ghosts.visible === false ) {
+                        self.show('ghosts');
+                        self.mc.ghosts.gotoAndPlay(1);
+                    }
                 }
             };
         }

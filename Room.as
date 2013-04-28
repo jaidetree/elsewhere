@@ -227,5 +227,9 @@ package environment {
             return Environment.ui.inventory.hasItem(item);
         }
 
+        protected function clearInventory():void {
+            Environment.ui.inventory.clear();
+        }
+
     }
 }

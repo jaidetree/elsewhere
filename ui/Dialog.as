@@ -27,26 +27,39 @@ package environment.ui {
             else {
                 this.textList = [ txt ];
             }
-
-            mc.text = this.textList[0];
-            if ( this.textList.length > 1 ) {
-                mc.text = mc.text + ' (click to continue)';
-            }
             this.index = 0;
+            this.update();
         }
+
 
         public function clear() {
             this.mc().text = "";
+        }
+
+        private function update() {
+            var i = this.index;
+            var mc = this.mc();
+            if ( this.textList[i] is Function ) {
+                var answer = this.textList[i]();
+                if ( typeof ( answer ) === "string" ) {
+                    mc.text = answer;
+                } else {
+                    return; 
+                }
+            } else {
+                mc.text = this.textList[i];
+            }
+
+            if ( this.textList.length > 1 && this.index < this.textList.length - 1 ) {
+                mc.text = mc.text + ' (click to continue)';
+            }
         }
 
         private function cycleDialog(e:MouseEvent) {
             var mc = this.mc();
             if ( this.index < this.textList.length - 1 ) {
                 this.index++;
-                mc.text = this.textList[this.index];
-                if ( this.textList.length > 1 && this.index < this.textList.length - 1 ) {
-                    mc.text = mc.text + ' (click to continue)';
-                }
+                this.update();
             }        
         }
 

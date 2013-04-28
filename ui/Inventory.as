@@ -67,6 +67,13 @@ package environment.ui {
             var item:Object = this.getItem(itemName);
         }
 
+        public function clear() {
+            for (var item in this._mc) {
+                this._mc[item].visible = false;
+            }
+            this.obtainedItems = [];
+        }
+
         private function getIndex(itemIndex) {
             if ( typeof( itemIndex ) == "number" ) {
                 return itemIndex;
@@ -89,6 +96,6 @@ package environment.ui {
             }
             return -1;
         }
-        
+
     }
 }

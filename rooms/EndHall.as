@@ -53,7 +53,7 @@ package environment.rooms {
                 'unlocked': function() {
                     self.show('navExit');
                     self.hide('door');
-                    if ( ! self.locked && self.hasItem('blackkey') ) {
+                    if ( ! self.locked && self.hasItem('roperock') ) {
                         self.mc.gotoAndStop('ending');
                         self.currentFrame = self.mc.currentFrame;
                         return;
