@@ -47,11 +47,7 @@ package environment.rooms {
                 'hallway2': function() { 
                     this.setDialog('intro')
                     this.hide('animateUp');
-                    if ( this.trapSprung ) {
-                        this.hide('animateDown');
-                    } else {
-                        this.show('animateDown');
-                    }
+                    this.show('animateDown');
                     this.show('navHall');
                     this.show('navLab');
                     this.show('navExit');

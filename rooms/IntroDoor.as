@@ -1,5 +1,6 @@
 package environment.rooms {
     import environment.Room;
+    import environment.Environment;
 
     public class IntroDoor extends Room {
 
@@ -11,13 +12,12 @@ package environment.rooms {
             };
 
             this.navigation = {
-                navDoor: 'HallwayLegs'
+                navDoor: 'SandIntro'
             };
 
-            this.objects = {
-                key_1: {
-                    action: 'environment.addToInventory',
-                    msg: 'You have picked up a key.'
+            this.frames = {
+                '1': function() {
+                    Environment.view['uiContainer'].visible = true;
                 }
             };
         }

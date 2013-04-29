@@ -25,7 +25,8 @@ package environment.rooms {
             };
 
             this.navigation = {
-                navHall: 'ShortHallway'
+                navHall: 'ShortHallway',
+                navSand: 'Sandroom'
             };
 
             this.objects = {
@@ -56,6 +57,7 @@ package environment.rooms {
                     self.hide('navHall');
                     self.show('animatePan');
                     self.hide('batpig');
+                    self.hide('navSand');
                 },
                 'hallwaymove': function () {
                     self.hide('navHall');
@@ -68,6 +70,8 @@ package environment.rooms {
                     } else {
                         self.setDialog('intro_right');
                     }
+                    self.currentFrame = self.mc.currentFrame;
+                    self.show('navSand');
                     self.show('navHall');
                     self.hide('animatePan');
                 }

@@ -71,7 +71,6 @@ package environment.ui {
             for (var item in this._mc) {
                 this._mc[item].visible = false;
             }
-            this.obtainedItems = [];
         }
 
         private function getIndex(itemIndex) {

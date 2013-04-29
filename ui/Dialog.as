@@ -51,7 +51,7 @@ package environment.ui {
             }
 
             if ( this.textList.length > 1 && this.index < this.textList.length - 1 ) {
-                mc.text = mc.text + ' (click to continue)';
+                mc.text = mc.text + ' More >>';
             }
         }
 

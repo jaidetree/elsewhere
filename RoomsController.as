@@ -70,6 +70,9 @@ package environment {
             var room = this.getRoom(roomIndex);
             var currentRoom;
             var mc = room.controller.getMovie();
+            if ( Environment.view['roomContainer'].loadGraphic.visible === true ) {
+                Environment.view['roomContainer'].loadGraphic.visible = false;
+            }
             if ( mc.visible === false ) {
                 mc.visible = true;
                 room.controller.resetFrames();

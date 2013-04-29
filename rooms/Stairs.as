@@ -68,6 +68,8 @@ package environment.rooms {
                     self.hide('navDown');
                     self.hide('ghosts');
                     self.mc.ghosts.gotoAndStop(1);
+                    self.mc.hatch.buttonMode = true;
+                    self.mc.hatch.useHandCursor = true;
                 },
                 'signon': function() {
                     self.show('signAnimation');
@@ -76,8 +78,9 @@ package environment.rooms {
                     self.currentFrame = self.mc.currentFrame;
 
                     if ( self.hasItem('roperock') && self.mc.ghosts.visible === false ) {
-                        self.show('ghosts');
                         self.mc.ghosts.gotoAndPlay(1);
+                        self.show('ghosts');
+                        self.hide('navDown');
                     }
                 }
             };
