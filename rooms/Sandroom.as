@@ -41,7 +41,6 @@ package environment.rooms {
 
                     if ( self.hasItem('roperock') ) {
                         this.setDialog('final_intro');
-                        self.hide('sand');
                     } else {
                         this.setDialog('intro');
                    } 
